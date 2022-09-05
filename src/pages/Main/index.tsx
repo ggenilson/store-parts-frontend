@@ -3,7 +3,11 @@ import Select from "react-select";
 import Table, { TableColumnProps } from "../../components/Table";
 import useDebounce from "../../hooks/useDebounce";
 import api from "../../services/api";
-import { filterParts, filterPartsByType } from "../../utils/filterParts";
+import {
+  filterParts,
+  filterPartsByType,
+  orderPartsByPrice,
+} from "../../utils/filterParts";
 import { FiltersContainer, Input } from "./styles";
 
 interface ISelect {
@@ -25,6 +29,11 @@ const MainPage: React.FC = () => {
   const [types, setTypes] = useState<TypesProps>([]);
   const [selectedTypeOption, setSelectedTypeOption] = useState<ISelect>();
   const [search, setSearch] = useState("");
+  const [priceOrder, setPriceOrder] = useState<TypesProps>([
+    { value: "up", label: "up" },
+    { value: "down", label: "down" },
+  ]);
+  const [selectedPriceOrder, setSelectedPriceOrder] = useState<ISelect>();
 
   const handleGetTypes = async () => {
     const result = await api.get("/store/part-types");
@@ -78,6 +87,10 @@ const MainPage: React.FC = () => {
     filteredParts = filterPartsByType(parts, selectedTypeOption.value);
   }
 
+  if (selectedPriceOrder && !search) {
+    filteredParts = orderPartsByPrice(parts, selectedPriceOrder.value);
+  }
+
   return (
     <>
       <FiltersContainer>
@@ -86,6 +99,7 @@ const MainPage: React.FC = () => {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
+
         <Select
           options={types}
           placeholder="type"
@@ -93,12 +107,23 @@ const MainPage: React.FC = () => {
           value={selectedTypeOption}
           onChange={(e) => setSelectedTypeOption(e!)}
         />
+
+        <Select
+          options={priceOrder}
+          placeholder="price order"
+          className="select-type"
+          value={selectedPriceOrder}
+          onChange={(e) => setSelectedPriceOrder(e!)}
+        />
       </FiltersContainer>
 
       <Table
         {...{
           columns,
-          data: search.length || selectedTypeOption ? filteredParts : parts,
+          data:
+            search.length || selectedTypeOption || selectedPriceOrder
+              ? filteredParts
+              : parts,
           loading,
         }}
       />

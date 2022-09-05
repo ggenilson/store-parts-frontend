@@ -18,3 +18,21 @@ export const filterPartsByType = (data: IParts[], search: string) => {
 
   return filteredPartsByType;
 };
+
+export const orderPartsByPrice = (data: IParts[], type: string) => {
+  if (type === "up") {
+    return data.sort((a, b) => {
+      const firstNumber = parseFloat(a.price.replace("$", ""));
+      const secondNumber = parseFloat(b.price.replace("$", ""));
+
+      return firstNumber - secondNumber;
+    });
+  }
+
+  return data.sort((a, b) => {
+    const firstNumber = parseFloat(a.price.replace("$", ""));
+    const secondNumber = parseFloat(b.price.replace("$", ""));
+
+    return secondNumber - firstNumber;
+  });
+};

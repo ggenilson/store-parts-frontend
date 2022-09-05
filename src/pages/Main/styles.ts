@@ -16,3 +16,14 @@ export const Input = styled.input`
   border: 1px solid #ccc;
   padding: 10px;
 `;
+
+export const Button = styled.button`
+  border-radius: 7px;
+  outline: none;
+  border: 1px solid #ccc;
+  font-weight: bold;
+  padding: 10px;
+  background-color: orange;
+  cursor: pointer;
+  color: #fff;
+`;
