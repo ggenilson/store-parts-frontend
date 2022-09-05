@@ -36,9 +36,10 @@ const Table: <T>(p: TableProps<T>) => React.ReactElement<T> = ({
 }) => {
   return (
     <Container>
-      {!loading && data.length && (
+      {(!loading && data.length && (
         <Info defaultValue={"row"}>{`Showing ${data.length} results`}</Info>
-      )}
+      )) ||
+        null}
       <BaseTable>
         <TableHeader>
           <HeaderRow>
@@ -48,7 +49,7 @@ const Table: <T>(p: TableProps<T>) => React.ReactElement<T> = ({
           </HeaderRow>
         </TableHeader>
         <TableBody>
-          {!loading &&
+          {(!loading &&
             data.length &&
             data.map((row, index) => (
               <Row key={index} onClick={() => onRowClick && onRowClick(row)}>
@@ -64,19 +65,20 @@ const Table: <T>(p: TableProps<T>) => React.ReactElement<T> = ({
                   </Column>
                 ))}
               </Row>
-            ))}
+            ))) ||
+            null}
           {!loading && !data.length && (
             <Row>
               <EmptyColumn>No data found</EmptyColumn>
             </Row>
           )}
-          {loading && (
+          {loading ? (
             <Row>
               <LoaderContainer>
                 <Loader />
               </LoaderContainer>
             </Row>
-          )}
+          ) : null}
         </TableBody>
       </BaseTable>
     </Container>

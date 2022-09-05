@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Table, { TableColumnProps } from "../components/Table";
+import useDebounce from "../hooks/useDebounce";
 import api from "../services/api";
 import { filterParts } from "../utils/filterParts";
 
@@ -45,7 +46,8 @@ const MainPage: React.FC = () => {
     handleGetParts();
   }, []);
 
-  const filteredParts = filterParts(parts, search.toLocaleLowerCase());
+  const debouncedValue = useDebounce<string>(search, 400);
+  const filteredParts = filterParts(parts, debouncedValue.toLocaleLowerCase());
 
   return (
     <>

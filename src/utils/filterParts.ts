@@ -8,7 +8,5 @@ export const filterParts = (data: IParts[], search: string) => {
       type.toLocaleLowerCase().includes(search)
   );
 
-  console.log(search);
-
   return filteredParts;
 };
