@@ -3,21 +3,27 @@ import Select from "react-select";
 import Table, { TableColumnProps } from "../../components/Table";
 import useDebounce from "../../hooks/useDebounce";
 import api from "../../services/api";
-import { filterParts } from "../../utils/filterParts";
+import { filterParts, filterPartsByType } from "../../utils/filterParts";
 import { FiltersContainer, Input } from "./styles";
+
+interface ISelect {
+  value: string;
+  label: string;
+}
 
 export interface IParts {
   name: string;
   price: string;
-  type: "Mouse" | "Keyboard" | "Monitor" | "Mousepad";
+  type: string;
 }
 
-type TypesProps = Array<{ value: string; label: string }>;
+type TypesProps = Array<ISelect>;
 
 const MainPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [parts, setParts] = useState<IParts[]>([]);
-  const [types, setTypes] = useState<TypesProps[]>([]);
+  const [types, setTypes] = useState<TypesProps>([]);
+  const [selectedTypeOption, setSelectedTypeOption] = useState<ISelect>();
   const [search, setSearch] = useState("");
 
   const handleGetTypes = async () => {
@@ -66,7 +72,11 @@ const MainPage: React.FC = () => {
   }, []);
 
   const debouncedValue = useDebounce<string>(search, 400);
-  const filteredParts = filterParts(parts, debouncedValue.toLocaleLowerCase());
+  let filteredParts = filterParts(parts, debouncedValue.toLocaleLowerCase());
+
+  if (selectedTypeOption && !search) {
+    filteredParts = filterPartsByType(parts, selectedTypeOption.value);
+  }
 
   return (
     <>
@@ -76,13 +86,19 @@ const MainPage: React.FC = () => {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
-        <Select options={types} />
+        <Select
+          options={types}
+          placeholder="type"
+          className="select-type"
+          value={selectedTypeOption}
+          onChange={(e) => setSelectedTypeOption(e!)}
+        />
       </FiltersContainer>
 
       <Table
         {...{
           columns,
-          data: search.length > 0 ? filteredParts : parts,
+          data: search.length || selectedTypeOption ? filteredParts : parts,
           loading,
         }}
       />

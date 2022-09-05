@@ -10,3 +10,11 @@ export const filterParts = (data: IParts[], search: string) => {
 
   return filteredParts;
 };
+
+export const filterPartsByType = (data: IParts[], search: string) => {
+  const filteredPartsByType = data.filter(
+    ({ type }) => type.toLocaleLowerCase() === search
+  );
+
+  return filteredPartsByType;
+};
