@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
-import Table, { TableColumnProps } from "../components/Table";
-import useDebounce from "../hooks/useDebounce";
-import api from "../services/api";
-import { filterParts } from "../utils/filterParts";
+import Select from "react-select";
+import Table, { TableColumnProps } from "../../components/Table";
+import useDebounce from "../../hooks/useDebounce";
+import api from "../../services/api";
+import { filterParts } from "../../utils/filterParts";
+import { FiltersContainer, Input } from "./styles";
 
 export interface IParts {
   name: string;
@@ -10,10 +12,26 @@ export interface IParts {
   type: "Mouse" | "Keyboard" | "Monitor" | "Mousepad";
 }
 
+type TypesProps = Array<{ value: string; label: string }>;
+
 const MainPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [parts, setParts] = useState<IParts[]>([]);
+  const [types, setTypes] = useState<TypesProps[]>([]);
   const [search, setSearch] = useState("");
+
+  const handleGetTypes = async () => {
+    const result = await api.get("/store/part-types");
+
+    if (result.data) {
+      const resTypes = result.data.map((type: string) => ({
+        value: type.toLowerCase(),
+        label: type,
+      }));
+
+      setTypes(resTypes);
+    }
+  };
 
   const handleGetParts = async () => {
     setLoading(true);
@@ -43,6 +61,7 @@ const MainPage: React.FC = () => {
   ];
 
   useEffect(() => {
+    handleGetTypes();
     handleGetParts();
   }, []);
 
@@ -51,11 +70,15 @@ const MainPage: React.FC = () => {
 
   return (
     <>
-      <input
-        placeholder="search ..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
+      <FiltersContainer>
+        <Input
+          placeholder="search ..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+        <Select options={types} />
+      </FiltersContainer>
+
       <Table
         {...{
           columns,
