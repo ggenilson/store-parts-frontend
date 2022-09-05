@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Table, { TableColumnProps } from "../components/Table";
 import api from "../services/api";
+import { filterParts } from "../utils/filterParts";
 
-interface IParts {
+export interface IParts {
   name: string;
   price: string;
   type: "Mouse" | "Keyboard" | "Monitor" | "Mousepad";
@@ -11,6 +12,7 @@ interface IParts {
 const MainPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [parts, setParts] = useState<IParts[]>([]);
+  const [search, setSearch] = useState("");
 
   const handleGetParts = async () => {
     setLoading(true);
@@ -43,9 +45,22 @@ const MainPage: React.FC = () => {
     handleGetParts();
   }, []);
 
+  const filteredParts = filterParts(parts, search.toLocaleLowerCase());
+
   return (
     <>
-      <Table {...{ columns, data: parts, loading }} />
+      <input
+        placeholder="search ..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+      />
+      <Table
+        {...{
+          columns,
+          data: search.length > 0 ? filteredParts : parts,
+          loading,
+        }}
+      />
     </>
   );
 };
