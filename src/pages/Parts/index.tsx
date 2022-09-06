@@ -1,35 +1,29 @@
 import React from "react";
-import { useParams } from "react-router-dom";
-import { Loader } from "../../components/Table/styles";
-import usePart from "../../hooks/useParts";
+
+import usePartsPageState from "./state";
 import { Container, Info } from "./styles";
 
 const PartsPage: React.FC = () => {
-  const { partName } = useParams();
-
-  const { loading, part } = usePart(partName!);
-
-  console.log(partName);
-
-  if (loading) {
-    return <Loader />;
-  }
+  const { part, getLoader } = usePartsPageState();
 
   return (
     <Container>
       <Info>
         <h3>name:</h3>
         <span>{part?.name}</span>
+        {getLoader()}
       </Info>
 
       <Info>
         <h3>type:</h3>
         <span>{part?.type}</span>
+        {getLoader()}
       </Info>
 
       <Info>
         <h3>price:</h3>
         <span>{part?.price}</span>
+        {getLoader()}
       </Info>
     </Container>
   );

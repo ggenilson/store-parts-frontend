@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { TableColumnProps } from "../../components/Table";
+import { PartContext } from "../../contexts";
 import useDebounce from "../../hooks/useDebounce";
 import api from "../../services/api";
 import {
@@ -37,6 +38,7 @@ const useMainPageState = () => {
   const [selectedPriceOrder, setSelectedPriceOrder] = useState<ISelect>();
 
   const navigate = useNavigate();
+  const { setPart } = useContext(PartContext);
 
   const handleGetTypes = async () => {
     const result = await api.get("/store/part-types");
@@ -106,6 +108,7 @@ const useMainPageState = () => {
   }
 
   const onRowClick = (row: IParts) => {
+    setPart(row);
     navigate(`/parts/${row.name.replace(" ", "")}`);
   };
 
