@@ -132,10 +132,7 @@ const MainPage: React.FC = () => {
       <Table
         {...{
           columns,
-          data:
-            search.length || selectedTypeOption || selectedPriceOrder
-              ? filteredParts
-              : parts,
+          data: filteredParts.length ? filteredParts : parts,
           loading,
         }}
       />
