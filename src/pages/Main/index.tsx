@@ -7,6 +7,7 @@ import {
   filterParts,
   filterPartsByType,
   orderPartsByPrice,
+  removeDuplicateObjects,
 } from "../../utils/filterParts";
 import { FiltersContainer, Input } from "./styles";
 
@@ -81,14 +82,25 @@ const MainPage: React.FC = () => {
   }, []);
 
   const debouncedValue = useDebounce<string>(search, 400);
-  let filteredParts = filterParts(parts, debouncedValue.toLocaleLowerCase());
+  let filteredParts: IParts[] = [];
 
-  if (selectedTypeOption && !search) {
-    filteredParts = filterPartsByType(parts, selectedTypeOption.value);
+  if (search.length) {
+    filteredParts = filterParts(parts, debouncedValue.toLocaleLowerCase());
   }
 
-  if (selectedPriceOrder && !search) {
-    filteredParts = orderPartsByPrice(parts, selectedPriceOrder.value);
+  if (selectedTypeOption) {
+    filteredParts = [
+      ...filteredParts,
+      ...filterPartsByType(parts, selectedTypeOption.value),
+    ];
+  }
+
+  if (selectedPriceOrder) {
+    filteredParts = orderPartsByPrice(filteredParts, selectedPriceOrder.value);
+  }
+
+  if (filteredParts.length) {
+    filteredParts = removeDuplicateObjects(filteredParts);
   }
 
   return (

@@ -36,3 +36,9 @@ export const orderPartsByPrice = (data: IParts[], type: string) => {
     return secondNumber - firstNumber;
   });
 };
+
+export const removeDuplicateObjects = (array: IParts[]) => {
+  return [...new Set(array.map((s) => JSON.stringify(s)))].map((s) =>
+    JSON.parse(s)
+  );
+};
