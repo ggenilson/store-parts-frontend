@@ -8,7 +8,10 @@ const App: React.FC = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<MainPage />} />
-        <Route path="/parts" element={<PartsPage />} />
+        <Route path="/parts">
+          <Route index element={<PartsPage />} />
+          <Route path=":partName" element={<PartsPage />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

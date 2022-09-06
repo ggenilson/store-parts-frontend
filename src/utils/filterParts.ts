@@ -1,4 +1,4 @@
-import { IParts } from "../pages/Main";
+import { IParts } from "../pages/Main/state";
 
 export const filterParts = (data: IParts[], search: string) => {
   const filteredParts = data.filter(
