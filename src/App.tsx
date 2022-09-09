@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import MainPage from "./pages/Main";
 import PartsPage from "./pages/Parts";
 
@@ -8,7 +8,7 @@ import PartProvider from "./contexts/PartsContext";
 const App: React.FC = () => {
   return (
     <PartProvider>
-      <BrowserRouter>
+      <Router>
         <Routes>
           <Route path="/" element={<MainPage />} />
 
@@ -17,7 +17,7 @@ const App: React.FC = () => {
             <Route path=":partName" element={<PartsPage />} />
           </Route>
         </Routes>
-      </BrowserRouter>
+      </Router>
     </PartProvider>
   );
 };

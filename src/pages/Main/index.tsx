@@ -28,6 +28,7 @@ const MainPage: React.FC = () => {
           placeholder="search ..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
+          data-testid="input-search"
         />
 
         <Select
@@ -36,6 +37,7 @@ const MainPage: React.FC = () => {
           className="select-type"
           value={selectedTypeOption}
           onChange={(e) => setSelectedTypeOption(e!)}
+          data-testid="input-type"
         />
 
         <Select
@@ -44,6 +46,7 @@ const MainPage: React.FC = () => {
           className="select-type"
           value={selectedPriceOrder}
           onChange={(e) => setSelectedPriceOrder(e!)}
+          data-testid="input-price-order"
         />
       </FiltersContainer>
 
